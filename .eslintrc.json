@@ -1,6 +1,9 @@
 {
-    "extends": "airbnb-base",
-    "plugins": [
-        "import"
-    ]
+    "extends": "node-style-guide",
+    "parserOptions": {
+        "ecmaVersion": 8
+    },
+    "rules": {
+        "space-after-keywords": "off"
+    }
 }
