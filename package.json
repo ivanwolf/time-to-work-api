@@ -1,0 +1,20 @@
+{
+  "name": "time-to-work",
+  "version": "1.0.0",
+  "description": "Measure how much do it takes to go to work",
+  "main": "index.js",
+  "author": "Iván Wolf",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "koa": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
