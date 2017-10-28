@@ -8,11 +8,16 @@
   "private": false,
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --exit"
+    "test": "mocha --exit",
+    "build:test": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
+    "clear:test": "NODE_ENV=test sequelize db:migrate:undo:all",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "dotenv": "^4.0.0",
     "koa": "^2.3.0",
+    "koa-logger": "^3.1.0",
+    "koa-router": "^7.2.1",
     "pg": "^7.3.0",
     "sequelize": "^4.19.0"
   },
@@ -21,6 +26,7 @@
     "chai-http": "^3.0.0",
     "eslint": "^4.10.0",
     "eslint-config-node-style-guide": "^3.0.0",
-    "mocha": "^4.0.1"
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.1"
   }
 }

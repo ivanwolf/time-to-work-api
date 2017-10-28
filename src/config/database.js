@@ -1,4 +1,6 @@
-module.exports = {
+const env = process.env.NODE_ENV || 'development';
+
+const config = {
   development: {
     database: 'ttw-dev',
     dialect: 'postgres',
@@ -12,3 +14,6 @@ module.exports = {
     username: process.env.DB_USERNAME,
   },
 };
+
+
+module.exports = config[env];
