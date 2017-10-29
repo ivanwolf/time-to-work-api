@@ -8,7 +8,9 @@
   "private": false,
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --exit",
+    "test": "mocha --exit --recursive",
+    "test:models": "mocha models --exit --recursive",
+    "pretest": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
     "build:test": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
     "clear:test": "NODE_ENV=test sequelize db:migrate:undo:all",
     "dev": "nodemon index.js"
@@ -16,10 +18,12 @@
   "dependencies": {
     "dotenv": "^4.0.0",
     "koa": "^2.3.0",
+    "koa-body": "^2.5.0",
     "koa-logger": "^3.1.0",
     "koa-router": "^7.2.1",
     "pg": "^7.3.0",
-    "sequelize": "^4.19.0"
+    "sequelize": "^4.19.0",
+    "typeorm": "^0.1.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
