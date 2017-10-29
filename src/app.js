@@ -12,8 +12,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(async (ctx, next) => {
-  await next();
   ctx.res.type = 'application/json';
+  await next();
 });
 
 app.use(koaBody());

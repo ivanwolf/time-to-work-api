@@ -1,12 +1,9 @@
-module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    name: DataTypes.STRING
-  }, {
-    classMethods: {
-      associate: function(models) {
-        // associations can be defined here
-      }
-    }
-  });
-  return User;
-};
+const {Model} = require('objection');
+
+class User extends Model {
+  static get tableName() {
+    return 'users';
+  }
+}
+
+module.exports = User;

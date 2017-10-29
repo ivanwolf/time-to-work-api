@@ -7,7 +7,7 @@ const router = new Router();
 router.use(errorHandler('User'));
 
 router.get('indexUsers', '/', async (ctx) => {
-  const users = await ctx.db.User.findAll();
+  const users = await ctx.db.User.query();
   ctx.body = {
     data: users,
   };

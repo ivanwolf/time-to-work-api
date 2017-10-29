@@ -15,8 +15,15 @@ const connection = {
   },
 };
 
-module.exports = {
+const result = {
   client: 'pg',
-  connection: Object.assign({}, connection.default, connection[env])
+  connection: Object.assign({}, connection.default, connection[env]),
+  migrations: {
+    directory: path.join(__dirname, '/src/migrations')
+  },
+  seeds: {
+    directory: path.join(__dirname, '/src/seeds')
+  },
 };
 
+module.exports = result;
