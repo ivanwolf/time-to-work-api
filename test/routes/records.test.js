@@ -22,7 +22,7 @@ describe('routes : records', async () => {
       chai.request(server)
         .get('/recors')
         .send({
-          user_id: 1,
+          'user_id': 1,
         })
         .end((err, res) => {
           should.not.exist(err);

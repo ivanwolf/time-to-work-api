@@ -18,7 +18,7 @@ const connection = {
 const result = {
   client: 'pg',
   connection: Object.assign({}, connection.default, connection[env]),
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV !== 'production',
   migrations: {
     directory: path.join(__dirname, '..', 'migrations'),
   },

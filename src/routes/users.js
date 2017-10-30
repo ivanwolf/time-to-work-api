@@ -24,11 +24,10 @@ router.get('showUser', '/:id', async (ctx) => {
   const user = await ctx.queries.getUserById(ctx.params.id);
   if (user === undefined) {
     throw new NotFoundError();
-  } else {
-    ctx.body = {
-      data: user,
-    };
   }
+  ctx.body = {
+    data: user,
+  };
 });
 
 

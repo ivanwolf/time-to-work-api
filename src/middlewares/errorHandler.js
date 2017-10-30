@@ -2,6 +2,7 @@ const {
   NotFoundError,
   ValidationError,
   ConflictError,
+  MissingParameterError,
 } = require('../utils/errors');
 
 const errorHandler = resource => async (ctx, next) => {
@@ -25,6 +26,13 @@ const errorHandler = resource => async (ctx, next) => {
       ctx.status = 404;
       ctx.body = {
         error: `${resource} not found`,
+      };
+    }
+
+    if (error instanceof MissingParameterError) {
+      ctx.status = 422;
+      ctx.body = {
+        error: `Missing required param ${error.field}`,
       };
     }
   }
