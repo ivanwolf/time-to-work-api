@@ -8,11 +8,9 @@
   "private": false,
   "scripts": {
     "start": "node index.js",
-    "test": "mocha --exit --recursive",
-    "test:models": "mocha models --exit --recursive",
-    "pretest": "NODE_ENV=test sequelize db:migrate:undo:all && NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
-    "build:test": "NODE_ENV=test sequelize db:migrate && NODE_ENV=test sequelize db:seed:all",
-    "clear:test": "NODE_ENV=test sequelize db:migrate:undo:all",
+    "test": "mocha --recursive --exit",
+    "test:users": "mocha --recursive --exit --grep users",
+    "test:records": "mocha --recursive --exit --grep records",
     "dev": "nodemon index.js"
   },
   "dependencies": {
