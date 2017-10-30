@@ -35,7 +35,7 @@ const queries = (knex) => {
 };
 
 module.exports = async (ctx, next) => {
-  ctx.queries = queries(ctx.knex);
+  ctx.queries = Object.assign({}, ctx.queries, queries(ctx.knex));
   await next();
 };
 

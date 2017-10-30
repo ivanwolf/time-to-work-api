@@ -1,41 +1,43 @@
 const Router = require('koa-router');
 const {
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-  MissingParameterError,
-} = require('../utils/errors');
-const {errorHandler} = require('../middlewares');
+  errorHandler,
+  paramsHandler,
+  setupUser,
+} = require('../middlewares');
 const recordQueries = require('../queries/records');
-const parseBody = require('../utils/parseBody');
+const userQueries = require('../queries/users');
 
 const router = new Router();
 
-router.use(errorHandler('Record'));
+router.use(errorHandler('record'));
+router.use(paramsHandler({
+  'user_id': {
+    required: true,
+    notEmpty: true,
+  },
+}));
 router.use(recordQueries);
+router.use(userQueries);
+router.use(setupUser);
 
-router.post('indexRecords', '/', async (ctx) => {
-  const params = parseBody(ctx.request.body, [
-    'user_id',
-  ]);
-  if (params.user_id === undefined) {
-    throw new MissingParameterError('user_id');
-  }
-  if (params.user_id === '') {
-    throw new ValidationError('user_id');
-  }
-  const records = await ctx.queries.getRecords(params.user_id);
+
+router.post('createRecord', '/', async (ctx) => {
+  const record = await ctx.queries.createRecord(ctx.params.user_id);
+  ctx.body = {
+    record,
+  };
+});
+
+router.post('indexRecords', '/fetch', async (ctx) => {
+  console.log(ctx.params);
+  const records = await ctx.queries.getRecords(ctx.params.user_id);
   ctx.body = {
     data: records,
   };
 });
 
 router.post('createRecord', '/', async (ctx) => {
-  const params = parseBody(ctx.request.body, [
-    'user_id',
-  ]);
-
-  console.log(params);
+  console.log(ctx.params);
 });
 
 module.exports = router;

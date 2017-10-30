@@ -29,9 +29,18 @@ class MissingParameterError extends Error {
   }
 }
 
+class UserNotFoundError extends Error {
+  constructor(user_id, ...props) {
+    super(props);
+    Error.captureStackTrace(this, UserNotFoundError);
+    this.user_id = user_id;
+  };
+}
+
 module.exports = {
   NotFoundError,
   ValidationError,
   ConflictError,
   MissingParameterError,
+  UserNotFoundError,
 };

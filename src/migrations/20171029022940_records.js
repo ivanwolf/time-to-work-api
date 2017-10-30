@@ -6,7 +6,7 @@ exports.up = (knex, Promise) => {
     table.boolean('completed')
       .defaultTo(false);
 
-    table.timestamp('stated_at')
+    table.timestamp('started_at')
       .defaultTo(knex.fn.now());
 
     table.timestamp('finished_at')

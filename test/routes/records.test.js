@@ -5,7 +5,7 @@ const {
   knex,
 } = require('../setup');
 
-describe('routes : records', async () => {
+describe('routes : records', () => {
 
   beforeEach(async () => {
     await knex.migrate.rollback();
@@ -17,12 +17,12 @@ describe('routes : records', async () => {
     return knex.migrate.rollback();
   });
 
-  describe('GET /records', () => {
+  describe('POST /records', () => {
     it('should return all records by user', (done) => {
       chai.request(server)
-        .get('/recors')
+        .post('/records')
         .send({
-          'user_id': 1,
+          'user_id': '1',
         })
         .end((err, res) => {
           should.not.exist(err);
