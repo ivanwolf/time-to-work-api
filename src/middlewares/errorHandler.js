@@ -16,7 +16,7 @@ const setResponse = (ctx, error) => {
   } else if (error instanceof MissingParameterError) {
     ctx.status = 422;
   } else if (error instanceof UserNotFoundError) {
-    ctx.status = 422;
+    ctx.status = 404;
   }
   ctx.body = {
     error: error.message,

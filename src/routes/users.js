@@ -1,14 +1,21 @@
 const Router = require('koa-router');
+const {ConflictError} = require('../utils/errors');
 const {
-  NotFoundError,
-  ValidationError,
-  ConflictError,
-} = require('../utils/errors');
-const {errorHandler} = require('../middlewares');
+  errorHandler,
+  paramsHandler,
+  validateUser,
+} = require('../middlewares');
 const userQueries = require('../queries/users');
-const parseBody = require('../utils/parseBody');
 
 const router = new Router();
+
+const requireUsername = paramsHandler({
+  username:  {
+    require: true,
+    notEmpty: true,
+  }
+});
+
 
 router.use(errorHandler);
 router.use(userQueries);
@@ -20,29 +27,19 @@ router.get('indexUsers', '/', async (ctx) => {
   };
 });
 
-router.get('showUser', '/:id', async (ctx) => {
-  const user = await ctx.queries.getUserById(ctx.params.id);
-  if (user === undefined) {
-    throw new NotFoundError();
-  }
+router.get('showUser', '/:id', validateUser('id'), async (ctx) => {
   ctx.body = {
-    data: user,
+    data: ctx.state.currentUser,
   };
 });
 
 
-router.post('createUser', '/', async (ctx) => {
-  const params = parseBody(ctx.request.body, [
-    'username',
-  ]);
-  if (params.username === '') {
-    throw new ValidationError('username can not be empty');
-  }
-  let user = await ctx.queries.getUserByUsername(params.username);
+router.post('createUser', '/', requireUsername, async (ctx) => {
+  let user = await ctx.queries.getUserByUsername(ctx.params.username);
   if (user) {
     throw new ConflictError('User already exists');
   } else {
-    user = await ctx.queries.createUser(params);
+    user = await ctx.queries.createUser(ctx.params);
     ctx.status = 201;
     ctx.body = {
       data: user,

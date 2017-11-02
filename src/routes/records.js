@@ -2,7 +2,7 @@ const Router = require('koa-router');
 const {
   errorHandler,
   paramsHandler,
-  setupUser,
+  validateUser,
 } = require('../middlewares');
 const {ConflictError} = require('../utils/errors');
 const recordQueries = require('../queries/records');
@@ -19,7 +19,7 @@ router.use(paramsHandler({
 }));
 router.use(recordQueries);
 router.use(userQueries);
-router.use(setupUser);
+router.use(validateUser('user_id'));
 
 
 router.post('createRecord', '/', async (ctx) => {
