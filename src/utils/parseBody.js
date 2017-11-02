@@ -1,4 +1,3 @@
-const {findIndex} = require('lodash');
 const {MissingParameterError, ValidationError} = require('./errors');
 /*
   params: {
@@ -17,12 +16,10 @@ const {MissingParameterError, ValidationError} = require('./errors');
 
 const paramParser = (params, fields) => {
   // revisamos si el campo es requerido
-  console.log(params, fields);
   Object.keys(fields).forEach(key => {
     if (fields[key].required){
       if (!params.hasOwnProperty(key)) {
-        console.log('Entramos');
-        throw new MissingParameterError(key);
+        throw new MissingParameterError(`Missing ${key} parameter`);
       }
     }
   });
@@ -35,13 +32,12 @@ const paramParser = (params, fields) => {
       const field = fields[param];
       const value = params[param];
       if (field.notEmpty && value === '') {
-        throw new ValidationError(param);
+        throw new ValidationError(`${param} can not be empty`);
       }
       result[param] = value;
     }
 
   });
-  console.log(result);
   return result;
 };
 

@@ -9,40 +9,21 @@ const {
 const setResponse = (ctx, error) => {
   if (error instanceof ConflictError) {
     ctx.status = 409;
-    ctx.body = {
-      error: `Conflict error: ${error.field} has already been taken`,
-    };
-  }
-  if (error instanceof ValidationError) {
+  } else if (error instanceof ValidationError) {
     ctx.status = 422;
-    ctx.body = {
-      error: `Validation error: ${error.field} can not be empty`,
-    };
-  }
-
-  if (error instanceof NotFoundError) {
+  } else if (error instanceof NotFoundError) {
     ctx.status = 404;
-    ctx.body = {
-      error: `${resource} not found`,
-    };
-  }
-
-  if (error instanceof MissingParameterError) {
+  } else if (error instanceof MissingParameterError) {
     ctx.status = 422;
-    ctx.body = {
-      error: `Missing required param ${error.field}`,
-    };
-  }
-
-  if (error instanceof UserNotFoundError) {
+  } else if (error instanceof UserNotFoundError) {
     ctx.status = 422;
-    ctx.body = {
-      error: `User with id ${error.user_id} does not exists`,
-    };
   }
+  ctx.body = {
+    error: error.message,
+  };
 };
 
-const errorHandler = resource => async (ctx, next) => {
+const errorHandler = async (ctx, next) => {
   try {
     await next();
   } catch (error) {

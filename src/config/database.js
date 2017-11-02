@@ -18,6 +18,7 @@ const connection = {
 const result = {
   client: 'pg',
   connection: Object.assign({}, connection.default, connection[env]),
+  debug: true,
   migrations: {
     directory: path.join(__dirname, '..', 'migrations'),
   },

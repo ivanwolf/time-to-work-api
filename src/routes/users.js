@@ -10,7 +10,7 @@ const parseBody = require('../utils/parseBody');
 
 const router = new Router();
 
-router.use(errorHandler('User'));
+router.use(errorHandler);
 router.use(userQueries);
 
 router.get('indexUsers', '/', async (ctx) => {
@@ -36,11 +36,11 @@ router.post('createUser', '/', async (ctx) => {
     'username',
   ]);
   if (params.username === '') {
-    throw new ValidationError('username');
+    throw new ValidationError('username can not be empty');
   }
   let user = await ctx.queries.getUserByUsername(params.username);
   if (user) {
-    throw new ConflictError('username');
+    throw new ConflictError('User already exists');
   } else {
     user = await ctx.queries.createUser(params);
     ctx.status = 201;

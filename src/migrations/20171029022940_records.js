@@ -6,11 +6,9 @@ exports.up = (knex, Promise) => {
     table.boolean('completed')
       .defaultTo(false);
 
-    table.timestamp('started_at')
-      .defaultTo(knex.fn.now());
-
-    table.timestamp('finished_at')
-      .defaultTo(null);
+    table.date('date').defaultTo(knex.fn.now());
+    table.time('started_time').defaultTo(knex.fn.now());
+    table.time('finished_time').defaultTo(null);
 
     table.integer('user_id').notNullable();
     table.foreign('user_id')

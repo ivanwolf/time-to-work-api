@@ -4,12 +4,13 @@ const {
   paramsHandler,
   setupUser,
 } = require('../middlewares');
+const {ConflictError} = require('../utils/errors');
 const recordQueries = require('../queries/records');
 const userQueries = require('../queries/users');
 
 const router = new Router();
 
-router.use(errorHandler('record'));
+router.use(errorHandler);
 router.use(paramsHandler({
   'user_id': {
     required: true,
@@ -29,15 +30,21 @@ router.post('createRecord', '/', async (ctx) => {
 });
 
 router.post('indexRecords', '/fetch', async (ctx) => {
-  console.log(ctx.params);
   const records = await ctx.queries.getRecords(ctx.params.user_id);
   ctx.body = {
     data: records,
   };
 });
 
-router.post('createRecord', '/', async (ctx) => {
-  console.log(ctx.params);
+router.put('completeRecord', '/:id', async (ctx) => {
+  const record = await ctx.queries.getRecordById(ctx.params.id);
+  if (record.completed) {
+    throw new ConflictError('Record already completed');
+  }
+  const completed = await ctx.queries.completeRecord(ctx.params.id);
+  ctx.body = {
+    data: completed,
+  };
 });
 
 module.exports = router;
