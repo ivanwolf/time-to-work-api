@@ -36,7 +36,7 @@ describe('routes : users', () => {
     });
   });
 
-  describe('GET users/:id', () => {
+  describe('GET /users/:id', () => {
     it('should respond with a single user', (done) => {
       chai.request(server)
         .get('/users/1')
