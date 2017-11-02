@@ -17,12 +17,12 @@ describe('routes : records', () => {
     return knex.migrate.rollback();
   });
 
-  describe('POST /records', () => {
+  describe('POST /records/fetch', () => {
     it('should return all records by user', (done) => {
       chai.request(server)
-        .post('/records')
+        .post('/records/fetch')
         .send({
-          'user_id': '1',
+          'user_id': 1,
         })
         .end((err, res) => {
           should.not.exist(err);
@@ -32,10 +32,11 @@ describe('routes : records', () => {
           if (res.body.data.length >= 0) {
             res.body.data[0].should.include.keys(
               'id',
-              'comleted',
-              'started_at',
-              'finished_at',
               'user_id',
+              'comleted',
+              'date',
+              'started_time',
+              'finished_time',
             );
           }
           done();

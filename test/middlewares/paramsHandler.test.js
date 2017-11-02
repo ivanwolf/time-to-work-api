@@ -40,17 +40,25 @@ describe('middlewares : paramsHandler', () => {
       .equal(ctx.request.body.user_id);
   });
 
-  it('should raise error when user_id is not present', () => {
+  it('should raise error when user_id is not present', async () => {
     const ctx = setContext({
       key: 4,
     });
-    should.throw(() => middleware(ctx, next));
+    try {
+      await middleware(ctx, next);
+    } catch (error) {
+      error.should.be.an.instanceof(MissingParameterError);
+    }
   });
 
-  it('should rause error when user_id is empty', () => {
+  it('should raise error when user_id is empty', async () => {
     const ctx = setContext({
       'user_id': '',
     });
-    should.throw(() => middleware(ctx, next));
+    try {
+      await middleware(ctx, next);
+    } catch (error) {
+      error.should.be.an.instanceof(ValidationError);
+    }
   });
 });
