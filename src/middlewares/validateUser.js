@@ -9,11 +9,13 @@ const {UserNotFoundError} = require('../utils/errors');
 module.exports = key => {
   return async (ctx, next) => {
     const id = key ? ctx.params[key] : ctx.params.user_id;
-    const user = await ctx.queries.getUserById(id);
+    const user = await ctx.knex('users')
+      .first()
+      .where({id});
     if (user === undefined) {
       throw new UserNotFoundError('User not found');
     } else {
-      ctx.state.currentUser = user;
+      ctx.state.user = user;
     }
     await next();
   };

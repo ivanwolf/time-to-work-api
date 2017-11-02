@@ -29,7 +29,7 @@ router.get('indexUsers', '/', async (ctx) => {
 
 router.get('showUser', '/:id', validateUser('id'), async (ctx) => {
   ctx.body = {
-    data: ctx.state.currentUser,
+    data: ctx.state.user,
   };
 });
 

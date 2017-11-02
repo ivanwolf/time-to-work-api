@@ -6,37 +6,38 @@ const {
 } = require('../middlewares');
 const {ConflictError} = require('../utils/errors');
 const recordQueries = require('../queries/records');
-const userQueries = require('../queries/users');
 
 const router = new Router();
 
-router.use(errorHandler);
-router.use(paramsHandler({
+// Pedimos que user_id esté en el cuerpo del request
+const requireUserId = paramsHandler({
   'user_id': {
     required: true,
     notEmpty: true,
   },
-}));
-router.use(recordQueries);
-router.use(userQueries);
-router.use(validateUser('user_id'));
-
-
-router.post('createRecord', '/', async (ctx) => {
-  const record = await ctx.queries.createRecord(ctx.params.user_id);
-  ctx.body = {
-    record,
-  };
 });
 
-router.post('indexRecords', '/fetch', async (ctx) => {
-  const records = await ctx.queries.getRecords(ctx.params.user_id);
+// Creamos ctx.state.user a partir del user_id enviado como parámetro
+const setUser = validateUser('user_id');
+
+const createRecord = async (ctx) => {
+  const {user} = ctx.state;
+  const record = await ctx.queries.createRecord(user.id);
+  ctx.body = {
+    data: record,
+  };
+  ctx.status = 201;
+};
+
+const fetchRecords = async (ctx) => {
+  const {user} = ctx.state;
+  const records = await ctx.queries.getRecords(user.id);
   ctx.body = {
     data: records,
   };
-});
+};
 
-router.put('completeRecord', '/:id', async (ctx) => {
+const markRecordAsCompleted = async (ctx) => {
   const record = await ctx.queries.getRecordById(ctx.params.id);
   if (record.completed) {
     throw new ConflictError('Record already completed');
@@ -45,6 +46,29 @@ router.put('completeRecord', '/:id', async (ctx) => {
   ctx.body = {
     data: completed,
   };
-});
+};
+
+router.use(errorHandler);
+router.use(recordQueries);
+
+router.post(
+  '/',
+  requireUserId,
+  setUser,
+  createRecord,
+);
+
+router.post(
+  '/fetch',
+  requireUserId,
+  setUser,
+  fetchRecords,
+);
+
+router.put(
+  'completeRecord',
+  '/:id',
+  markRecordAsCompleted,
+);
 
 module.exports = router;
